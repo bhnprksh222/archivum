@@ -1,9 +1,13 @@
+import Login from './components/login/Login'
+
 import './App.scss'
 
-function App() {
+
+const App = () => {
+
   return (
     <>
-      Archivum
+      <Login />
     </>
   )
 }

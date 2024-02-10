@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+@mixin font-face($family, $size: 1.6rem, $weight: normal, $style: normal) {
+    @if $family =='ubuntu' {
+        font-family: 'Ubuntu', sans-serif;
+    }
+
+    @else if $family =='bebas' {
+        font-family: 'Bebas Neue', sans-serif;
+    }
+
+    font-weight: $weight;
+    font-style: $style;
+    font-size: $size;
+}
