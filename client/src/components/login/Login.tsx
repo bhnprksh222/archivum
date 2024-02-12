@@ -1,19 +1,26 @@
+import Footer from '../Footer/Footer'
+import history from "../../history";
+
 import './login.scss'
+
 import LogoWithCaption from '../../assets/logo-cap.svg?react';
 import LogoSM from '../../assets/logo-sm.svg?react';
+import MetaMask from '../../assets/metamask.svg?react';
 
 const Login = () => {
     return (
         <>
             <div className='login-top'>
-                <LogoSM className='login-top-logosm' />
+                <LogoSM className='login-top-logosm' onClick={() => history.push('/')} />
                 <div className='login-top-line'></div>
             </div>
             <div className='login'>
                 <LogoWithCaption className='login-logo' />
-                <button className='login-btn'>LOGIN WITH METAMASK</button>
+                <button className='login-btn'>
+                    LOGIN WITH METAMASK <MetaMask className="login-btn-metamask" />
+                </button>
             </div>
-            <p className='login-footer'>Developed with ❤️ by <span>@Kanyaraasi</span></p>
+            <Footer />
         </>
     )
 }
