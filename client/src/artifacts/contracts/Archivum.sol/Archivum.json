@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Archivum",
+  "sourceName": "contracts/Archivum.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220969a225cc56a9b8ecbf1221c0f2bd8a9b1843b5b60a6f5297521402496b75e5064736f6c63430008130033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220969a225cc56a9b8ecbf1221c0f2bd8a9b1843b5b60a6f5297521402496b75e5064736f6c63430008130033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
