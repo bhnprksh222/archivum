@@ -1,4 +1,4 @@
-import Footer from '../Footer/Footer'
+import Footer from '../../components/Footer/Footer'
 import history from "../../history";
 
 import './login.scss'
