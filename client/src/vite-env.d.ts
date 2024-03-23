@@ -1,6 +1,11 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 
-interface Window {
-    ethereum: any;
+import { MetaMaskInpageProvider } from "@metamask/providers";
+
+declare global {
+    interface Window {
+        ethereum?: MetaMaskInpageProvider | any,
+        web3?: any
+    }
 }
