@@ -1,0 +1,31 @@
+@import '../../sass/theme.scss';
+
+.footer {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 2rem;
+    position: relative;
+    transform: translateY(4rem);
+
+    &-line {
+        height: .2rem;
+        width: calc(100vw - 22rem);
+        background-color: $black;
+        align-self: center;
+        border-radius: 1rem;
+    }
+
+    &-tagline {
+        @include font-face($family: 'ubuntu', $size: 1rem);
+        text-align: center;
+
+        &>span {
+            text-decoration: underline;
+
+            &:hover {
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
+    }
+}

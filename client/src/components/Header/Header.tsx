@@ -1,0 +1,33 @@
+
+import history from "../../history"
+
+import './header.scss'
+
+import LogoSM from "../../assets/logo-sm.svg?react";
+import profile from "../../assets/default_pic.png"
+
+
+export const Header1 = () => {
+  return (
+    <div className="header1">
+      <div className="logo">
+        <LogoSM />
+      </div>
+    </div>
+  )
+}
+
+
+export const Header2 = () => {
+  return (
+    <div className="header2">
+      <div className='login-top'>
+          <LogoSM className='login-top-logosm' onClick={() => history.replace('/')} />
+          <div className='login-top-line'></div>
+      </div>
+      <div className="profile">
+        <img src={profile} alt="logo" />
+      </div>
+    </div>
+  )
+}
