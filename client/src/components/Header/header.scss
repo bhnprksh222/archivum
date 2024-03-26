@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
     gap: 1.5rem;
 
     .logo {
@@ -38,6 +38,15 @@
             width: 6rem;
             height: 6rem;
             border-radius: 75%;
+        }
+
+        &-account_no {
+            @include font-face($family: 'ubuntu', $size: 1rem);
+            transform: translateX(-2rem);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100px;
         }
     }
 

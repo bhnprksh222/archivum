@@ -1,9 +1,6 @@
 @import "../../sass/theme.scss";
 
 .main2 {
-
-    // border: 1px solid black;
-    // height: ;
     margin: {
         top: .5rem;
         left: 1rem;
@@ -26,7 +23,7 @@
     margin-bottom: .5rem;
 
     .heading {
-        @include font-face($family: 'bebas', $size: 2rem);
+        @include font-face($family: 'ubuntu', $size: 2rem);
         text-align: center;
     }
 
@@ -39,7 +36,7 @@
             border: none;
             background-color: $black;
             color: $white;
-            // cursor: pointer;
+            cursor: pointer;
 
         }
 
@@ -62,7 +59,7 @@
 }
 
 .main-body {
-    margin:  2rem;
+    margin: 2rem;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     border-radius: 10px;
     height: 75vh;
@@ -76,7 +73,7 @@
         padding: 2rem;
         height: 5rem;
     }
-}   
+}
 
 .view-continer {
     width: 4.5rem;

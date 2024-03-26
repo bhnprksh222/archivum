@@ -16,7 +16,6 @@ interface FileData {
 }
 
 const Landing = () => {
-
     const [gridView, setGridView] = useState(false);
     const [listView, setListView] = useState(true);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -129,24 +128,24 @@ const Landing = () => {
                         </div>
                     </div> : (
                         <div className="listView">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>SrNo</th>
-                                    <th>FileName</th>
-                                    <th>Datetime</th>
-                                    <th>Download</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((co, index) => <tr key={index + 1}>
-                                    <td data-label="SrNo">{index + 1}</td>
-                                    <td data-label="File Name">{co.name}</td>
-                                    <td data-label="Datetime">{co.date.toLocaleString()}</td>
-                                    <td data-label="Download" style={{ cursor: "pointer" }} onClick={() => handleDownload(co.url, co.name)}><FaDownload /></td>
-                                </tr>)}
-                            </tbody>
-                        </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>SrNo</th>
+                                        <th>FileName</th>
+                                        <th>Datetime</th>
+                                        <th>Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data.map((co, index) => <tr key={index + 1}>
+                                        <td data-label="SrNo">{index + 1}</td>
+                                        <td data-label="File Name">{co.name}</td>
+                                        <td data-label="Datetime">{co.date.toLocaleString()}</td>
+                                        <td data-label="Download" style={{ cursor: "pointer" }} onClick={() => handleDownload(co.url, co.name)}><FaDownload /></td>
+                                    </tr>)}
+                                </tbody>
+                            </table>
                         </div>
                     )}
                 </div>
