@@ -1,5 +1,4 @@
-import { Router, Route, Switch } from "react-router-dom";
-import history from "./history";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 
 import Login from './Pages/Login/Login'
@@ -12,11 +11,11 @@ const App = () => {
 
   return (
     <>
-      <Router history={history}>
+      <Router>
         <ScrollToTop>
           <Switch>
             <Route path="/" exact component={Login} />
-            <Route path="/landing" exact component={Landing} />
+            <Route path="/landing" component={Landing} />
           </Switch>
         </ScrollToTop>
       </Router>
