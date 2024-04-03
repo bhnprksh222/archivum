@@ -1,5 +1,8 @@
+import { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
+import { Web3 } from 'web3';
+import getWeb3 from "../../getWeb3";
 import Footer from '../../components/Footer/Footer'
-import history from "../../history";
 
 import './login.scss'
 
@@ -8,22 +11,67 @@ import LogoSM from '../../assets/logo-sm.svg?react';
 import MetaMask from '../../assets/metamask.svg?react';
 
 const Login = () => {
+    const [isMobile, setMobile] = useState<boolean>(false);
+    const [isConnected, setConnected] = useState<boolean | null>(null);
+    const [account, setAccount] = useState<string | null>(null)
 
-    return (
-        <>
-            <div className='login-top'>
-                <LogoSM className='login-top-logosm' onClick={() => history.push('/')} />
-                <div className='login-top-line'></div>
-            </div>
-            <div className='login'>
-                <LogoWithCaption className='login-logo' />
-                <button className='login-btn'>
-                    LOGIN WITH METAMASK <MetaMask className="login-btn-metamask" />
-                </button>
-            </div>
-            <Footer />
-        </>
-    )
+    const history = useHistory();
+
+
+    useEffect(() => {
+        const get_account = async () => {
+            if (window.ethereum) {
+                // instantiate Web3 with the injected provider
+                const web3 = new Web3(window.ethereum);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                //get the connected accounts
+                const accounts = await web3.eth.getAccounts();
+                setAccount(accounts[0])
+            }
+            if (account) {
+                setConnected(true);
+                history.push("/landing");
+            } else {
+                setConnected(false);
+            }
+        }
+
+        get_account()
+    });
+
+    const connectMetamask = async () => {
+        try {
+            await getWeb3();
+
+            history.push("/landing");
+        } catch (error) {
+            alert(
+                `Failed to load web3, accounts, or contract. Check console for details.`
+            );
+            console.error(error);
+        }
+    }
+
+    if (isConnected === null || isConnected === true) {
+        history.push('/landing');
+    } else if (isConnected === false) {
+        return (
+            <>
+                <div className='login-top'>
+                    <LogoSM className='login-top-logosm' onClick={() => history.push('/')} />
+                    <div className='login-top-line'></div>
+                </div>
+                <div className='login'>
+                    <LogoWithCaption className='login-logo' />
+                    <button className='login-btn' onClick={() => connectMetamask()}>
+                        CONNECT TO METAMASK <MetaMask className="login-btn-metamask" />
+                    </button>
+                </div>
+                <Footer />
+            </>
+        )
+    }
 }
 
 export default Login

@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import Web3 from "web3";
 
 const getWeb3 = async () => {
     // Modern dapp browsers...
+    const [connectedAccount, setConnectedAccount] = useState('null')
     if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         try {
-            // Request account access if needed
-            await window.ethereum.enable();
-            // Acccounts now exposed
+            const web3 = new Web3(window.ethereum);
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await web3.eth.getAccounts();
+            setConnectedAccount(accounts[0]);
             return web3;
         } catch (error) {
             console.log(error);
