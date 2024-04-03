@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { Web3 } from 'web3';
-
 import getWeb3 from "../../getWeb3";
 import Footer from '../../components/Footer/Footer'
 
