@@ -15,15 +15,10 @@ const App = () => {
         <ScrollToTop>
           <Switch>
             <Route path="/" exact component={Login} />
-<<<<<<< Updated upstream
-            <Route path="/landing" component={Landing} />
-          </Switch>
-=======
             <Route path="/landing" exact component={Landing} />
             <Route component={PageNotFound} />
-            <Route path="/" component={Button} />   
-          </Switch> 
->>>>>>> Stashed changes
+            <Route path="/" component={Button} />
+          </Switch>
         </ScrollToTop>
       </Router>
     </>
