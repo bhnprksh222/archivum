@@ -1,77 +1,104 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { Web3 } from 'web3';
-import getWeb3 from "../../getWeb3";
+import { ethers } from 'ethers'
+
+import { setAccount } from '../../reducers/accountReducer'
+import { setContract } from '../../reducers/contractReducer'
+import { setProvider } from '../../reducers/providerReducer'
+
 import Footer from '../../components/Footer/Footer'
+import Archivum from '../../artifacts/contracts/Archivum.sol/Archivum.json';
 
 import './login.scss'
 
 import LogoWithCaption from '../../assets/logo-cap.svg?react';
 import LogoSM from '../../assets/logo-sm.svg?react';
 import MetaMask from '../../assets/metamask.svg?react';
+import { RootState } from '../../reducers';
 
 const Login = () => {
-    const [isMobile, setMobile] = useState<boolean>(false);
-    const [isConnected, setConnected] = useState<boolean | null>(null);
-    const [account, setAccount] = useState<string | null>(null)
+    const dispatch = useDispatch();
 
+    const handleSetAccount = (account: string) => {
+        dispatch(setAccount(account));
+    };
+    const handleSetContract = (contract: ethers.Contract) => {
+        dispatch(setContract(contract));
+    };
+    const handleSetProvider = (provider: ethers.BrowserProvider) => {
+        dispatch(setProvider(provider));
+    };
+
+    const account = useSelector((state: RootState) => state.account.account);
+    const provider = useSelector((state: RootState) => state.provider.provider);
+    const contract = useSelector((state: RootState) => state.contract.contract);
     const history = useHistory();
 
 
     useEffect(() => {
-        const get_account = async () => {
-            if (window.ethereum) {
-                // instantiate Web3 with the injected provider
-                const web3 = new Web3(window.ethereum);
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+        window.ethereum.on("chainChanged", () => {
+            window.location.reload()
+        })
 
-                //get the connected accounts
-                const accounts = await web3.eth.getAccounts();
-                setAccount(accounts[0])
-            }
-            if (account) {
-                setConnected(true);
-                history.push("/landing");
-            } else {
-                setConnected(false);
-            }
+        window.ethereum.on("accountsChanged", () => {
+            window.location.reload()
+        })
+    }, [])
+
+    const connect = async () => {
+        if (window.ethereum) {
+            console.log('detected')
         }
-
-        get_account()
-    });
-
-    const connectMetamask = async () => {
         try {
-            await getWeb3();
+            const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts"
+            })
+            const accountNo = accounts[0]
+            console.log(accountNo)
+            handleSetAccount(accountNo)
+            const providerType = new ethers.BrowserProvider(window.ethereum);
+            if (providerType) {
+                await providerType.send("eth_requestAccounts", []);
+                const signer = providerType.getSigner();
+                const address = (await signer).getAddress();
+                handleSetAccount(`${await address}`);
 
-            history.push("/landing");
-        } catch (error) {
-            alert(
-                `Failed to load web3, accounts, or contract. Check console for details.`
-            );
-            console.error(error);
+                let contractAddress = `${import.meta.env.VITE_APP_ARCHIVUM_CONTRACT_ADDRESS}`
+                const _contractAddress = new ethers.Contract(
+                    contractAddress, Archivum.abi, await signer
+                )
+                handleSetContract(_contractAddress)
+                handleSetProvider(providerType)
+                console.log('address', address)
+            }
+
+            if (account && contract && provider) {
+                history.push('/landing')
+                history.go(0)
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
-    if (isConnected === null || isConnected === true) {
-        history.push('/landing');
-    } else if (isConnected === false) {
-        return (
-            <>
-                <div className='login-top'>
-                    <LogoSM className='login-top-logosm' onClick={() => history.push('/')} />
-                    <div className='login-top-line'></div>
-                </div>
-                <div className='login'>
-                    <LogoWithCaption className='login-logo' />
-                    <button className='login-btn' onClick={() => connectMetamask()}>
-                        CONNECT TO METAMASK <MetaMask className="login-btn-metamask" />
-                    </button>
-                </div>
-                <Footer />
-            </>
-        )
-    }
-}
 
+    return (
+        <>
+            <div className='login-top'>
+                <LogoSM className='login-top-logosm' onClick={() => history.push('/')} />
+                <div className='login-top-line'></div>
+            </div>
+            <div className='login'>
+                <LogoWithCaption className='login-logo' />
+                <button className='login-btn'
+                    onClick={() => connect()}
+                >
+                    CONNECT TO METAMASK <MetaMask className="login-btn-metamask" />
+                </button>
+            </div>
+            <Footer />
+        </>
+    )
+}
 export default Login

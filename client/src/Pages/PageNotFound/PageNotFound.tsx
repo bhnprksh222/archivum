@@ -5,7 +5,7 @@ const PageNotFound: React.FC = () => {
   const history = useHistory()
 
   const Redirect = () => {
-    history.push('/landing')
+    history.push('/')
     history.go(0)
   }
   return (

@@ -9,3 +9,11 @@ declare global {
         web3?: any
     }
 }
+
+interface ImportMetaEnv {
+    readonly VITE_APP_ARCHIVUM_CONTRACT_ADDRESS: string
+}
+
+interface ImportMeta {
+    readonly env: ImportMetaEnv
+}

@@ -16,6 +16,7 @@ interface FileData {
 }
 
 const Landing = () => {
+
     const [gridView, setGridView] = useState(false);
     const [listView, setListView] = useState(true);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -83,6 +84,7 @@ const Landing = () => {
             setData(sortedData);
         }
     }
+
 
     return (
         <>
