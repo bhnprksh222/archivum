@@ -23,7 +23,7 @@ export const Header1 = () => {
 
 export const Header2 = () => {
   const history = useHistory();
-  const account = useSelector((state: RootState) => state.account.account);
+  const accountNo = useSelector((state: RootState) => state.account.account);
 
   return (
     <div className="header2">
@@ -35,7 +35,7 @@ export const Header2 = () => {
       </div>
       <div className="profile">
         <img src={profile} alt="logo" />
-        <p>{account ? account : "Not Connected"}</p>
+        <p className="profile-account_no">{accountNo ? `${accountNo}` : "Not Connected"}</p>
       </div>
     </div>
   )
