@@ -1,5 +1,4 @@
 import { ChangeEvent, useState, useRef, useEffect, SyntheticEvent } from 'react'
-import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid';
 
 import { Header2 } from "../../components/Header/Header"
@@ -115,31 +114,31 @@ const Landing = () => {
         if (file) {
             try {
                 const formData = new FormData();
-                console.log('file ', file)
                 formData.append("file", file);
-                console.log('formData: ', formData)
-                const resFile = await axios({
-                    method: "post",
-                    url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-                    data: formData,
-                    headers: {
-                        "pinata_api_key": `${import.meta.env.VITE_APP_PINATA_API_KEY}`,
-                        "pinata_secret_api_key": `${import.meta.env.VITE_APP_PINATA_API_SECRET}`,
-                        "Content-Type": "multipart/form-data"
-                    },
+                const metadata = JSON.stringify({
+                    name: fileName,
                 });
-                console.log("resFile: ", resFile)
-                console.log('formData:  ', formData)
-                if (contract) {
-                    // const ImgHash = `${import.meta.env.VITE_APP_PINATA_GATEWAY_URL}/${resFile.data.IpfsHash}`;
-                    const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
-                    contract.add(account, ImgHash);
-                    alert("Successfully Image Uploaded");
-                    setFileName("No image selected");
-                    setFile(null);
-                } else {
-                    console.log("Contract is null or undefined");
-                }
+                formData.append("pinataMetadata", metadata);
+                const options = JSON.stringify({
+                    cidVersion: 0,
+                });
+                formData.append("pinataOptions", options);
+                const resFile = await fetch(
+                    "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${import.meta.env.VITE_APP_PINATA_JWT}`,
+                        },
+                        body: formData,
+                    }
+                );
+                const uploadResult = await resFile.json();
+                const ImgHash = `https://gateway.pinata.cloud/ipfs/${uploadResult.IpfsHash}`;
+                await contract?.add(account, ImgHash);
+                alert("Successfully Image Uploaded");
+                setFileName("No image selected");
+                setFile(null);
             } catch (error) {
                 console.log("Unable to upload to Pinata!", error)
             }
