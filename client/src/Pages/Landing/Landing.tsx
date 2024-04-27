@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, useRef, useEffect, SyntheticEvent } from 'react'
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,6 +22,7 @@ interface FileData {
 
 const Landing = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const account = useSelector((state: RootState) => state.account.account);
     const provider = useSelector((state: RootState) => state.provider.provider);
     let contract = useSelector((state: RootState) => state.contract.contract);
@@ -259,6 +261,11 @@ const Landing = () => {
                     )}
                 </div>
             </div>
+
+            <p className="developers" onClick={() => {
+                history.push('/developers')
+                history.go(0)
+            }}>Developed by <strong>@Kanyaraasi Team</strong></p>
         </>
     )
 }
