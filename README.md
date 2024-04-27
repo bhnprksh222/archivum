@@ -1,13 +1,38 @@
 # Archivum - Decentralised File Storage system
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Blockchain Guide
 
-Try running some of the following tasks:
-
-```shell
+```
 npx hardhat help
+```
+To test
+```
 npx hardhat test
 REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
 ```
+
+To run the blockchain
+```
+npx hardhat node
+```
+To deploy the smart contract on the blockchain
+```
+npx hardhat --network localhost scripts/deploy.js
+```
+
+## To run React Application
+Go to client folder 
+```
+cd client
+```
+
+Run
+```
+npm start 
+```
+
+Application runs on the localhost on port 5173, open the below link to see it in action:
+```
+https:localhost:5173
+```
+
