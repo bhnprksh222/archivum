@@ -1,0 +1,48 @@
+@import '../../sass/theme.scss';
+
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    flex-flow: column;
+    justify-content: center;
+
+    &-404 {
+        @include font-face($family: 'bebas', $size: 10rem);
+        text-transform: uppercase;
+    }
+
+    &-title {
+        @include font-face($family: 'bebas', $size: 4rem);
+    }
+
+    &-description {
+        @include font-face($family: 'ubuntu', $size: 1.5rem);
+        width: 40vw;
+        text-align: center;
+        padding-bottom: 2rem;
+    }
+
+    &-gobackBtn {
+        @include font-face($family: 'bebas', $size: 2rem);
+        width: 22rem;
+        height: 5rem;
+        border: none;
+        border-radius: 1.6rem;
+        color: $white-2;
+        background: $black;
+        transition: all 0.25s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            cursor: pointer;
+            color: $black;
+            background: transparent;
+            border: 2px solid $black;
+            transform: scale(1.1);
+        }
+    }
+
+
+}
