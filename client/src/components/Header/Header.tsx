@@ -2,7 +2,8 @@
 import { useHistory } from "react-router-dom";
 
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setAccount } from '../../reducers/accountReducer';
 import { RootState } from "../../reducers";
 import './header.scss'
 
@@ -21,9 +22,17 @@ export const Header1 = () => {
 }
 
 
+
 export const Header2 = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const accountNo = useSelector((state: RootState) => state.account.account);
+
+  const handleLogout = () => {
+    dispatch(setAccount(null));
+    history.push('/')
+    history.go(0)
+  }
 
   return (
     <div className="header2">
@@ -35,7 +44,10 @@ export const Header2 = () => {
       </div>
       <div className="profile">
         <img src={profile} alt="logo" />
-        <p className="profile-account_no">{accountNo ? `${accountNo}` : "Not Connected"}</p>
+        <div className="profile-info">
+          <button onClick={() => handleLogout()}>Logout</button>
+          <p className="profile-account_no">{accountNo ? `${accountNo}` : "Not Connected"}</p>
+        </div>
       </div>
     </div>
   )

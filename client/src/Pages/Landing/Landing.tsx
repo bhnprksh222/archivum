@@ -1,14 +1,15 @@
 import { ChangeEvent, useState, useRef, useEffect, SyntheticEvent } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Header2 } from "../../components/Header/Header"
+import { setFiles } from '../../reducers/filesReducer'
 
 import { HiOutlineViewGrid } from "react-icons/hi";
 import { RiListIndefinite } from "react-icons/ri";
 import { FaDownload } from "react-icons/fa6";
 
 import "./landing.scss"
-import { useSelector } from 'react-redux';
 import { RootState } from '../../reducers';
 
 
@@ -19,9 +20,12 @@ interface FileData {
 }
 
 const Landing = () => {
+    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const provider = useSelector((state: RootState) => state.provider.provider);
-    const contract = useSelector((state: RootState) => state.contract.contract);
+    let contract = useSelector((state: RootState) => state.contract.contract);
+    const accountNo = useSelector((state: RootState) => state.account.account);
+    const files = useSelector((state: RootState) => state.files.files);
 
     useEffect(() => {
         window.ethereum.on("chainChanged", () => {
@@ -31,9 +35,35 @@ const Landing = () => {
         window.ethereum.on("accountsChanged", () => {
             window.location.reload()
         })
-    }, [])
+        const options = { method: 'GET', headers: { Authorization: `Bearer ${import.meta.env.VITE_APP_PINATA_JWT}` } };
+        const fetchFiles = async () => {
+            await fetch('https://api.pinata.cloud/data/pinList', options)
+                .then(data => data.json())
+                .then((data) => data?.rows)
+                .then(
+                    (data) => (
+                        data.map((fileData: any) => {
+                            const fileExists = files.some(file => file?.id === fileData.id);
+                            if (!fileExists) {
+                                dispatch(
+                                    setFiles({
+                                        date_pinned: fileData.date_pinned,
+                                        id: fileData.id,
+                                        ipfs_pin_hash: fileData.ipfs_pin_hash,
+                                        name: fileData.metadata.name,
+                                        user_id: fileData.user_id,
+                                        size: fileData.size
+                                    })
+                                )
+                            }
+                        })
+                    )
+                )
+            console.log(files)
+        }
+        fetchFiles()
+    }, []);
 
-    const accountNo = useSelector((state: RootState) => state.account.account);
 
     const [gridView, setGridView] = useState(false);
     const [listView, setListView] = useState(true);
@@ -89,7 +119,6 @@ const Landing = () => {
             return;
         }
 
-        // Create a temporary anchor element
         const downloadLink = document.createElement('a');
         downloadLink.href = imageUrl;
         downloadLink.download = "Archivum_" + filename;
@@ -135,10 +164,11 @@ const Landing = () => {
                 );
                 const uploadResult = await resFile.json();
                 const ImgHash = `https://gateway.pinata.cloud/ipfs/${uploadResult.IpfsHash}`;
-                await contract?.add(account, ImgHash);
+                // contract.add(account, ImgHash)
                 alert("Successfully Image Uploaded");
                 setFileName("No image selected");
                 setFile(null);
+                window.location.reload()
             } catch (error) {
                 console.log("Unable to upload to Pinata!", error)
             }
@@ -164,7 +194,7 @@ const Landing = () => {
                         ref={fileInputRef}
                         accept=".png, .jpeg, .jpg, .webp, .svg"
                     />
-                    <button type='submit'>Submit</button>
+                    <button className="main-header_submit-btn" type='submit'>Submit</button>
                 </form>
             </div >
             <div className="main-body">
@@ -183,17 +213,23 @@ const Landing = () => {
                 <div className="main-content">
                     {!gridView ? <div className="gridView">
                         <div className="Grid">
-                            {data.map(co =>
+                            {files.map(co =>
                                 <div className="card" key={uuidv4()}>
-                                    <div className="img-container">
-                                        <img src={co.url} alt="" width={"100%"} />
-                                    </div>
+                                    <a className="img-container" href={`https://gateway.pinata.cloud/ipfs/${co.ipfs_pin_hash}`} target="_blank">
+                                        <img src={`https://gateway.pinata.cloud/ipfs/${co.ipfs_pin_hash}`} alt={`${co.name}`} width={"100%"} />
+                                    </a>
                                     <div className="text-container">
-                                        <div className="heading">
+                                        <div className="text-container_heading">
                                             {co.name}
                                         </div>
-                                        <div className="date">
-                                            {co.date.toLocaleString()}
+                                        <div className='text-container_details'>
+                                            <div className="date">
+                                                {co.date_pinned.toLocaleString()}
+                                            </div>
+                                            <div className="download"
+                                                style={{ cursor: "pointer" }} onClick={() => handleDownload(co.ipfs_pin_hash, co.name)}>
+                                                <FaDownload />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -211,11 +247,11 @@ const Landing = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((co, index) => <tr key={index + 1}>
+                                    {files.map((co, index) => <tr key={index + 1}>
                                         <td data-label="SrNo">{index + 1}</td>
                                         <td data-label="File Name">{co.name}</td>
-                                        <td data-label="Datetime">{co.date.toLocaleString()}</td>
-                                        <td data-label="Download" style={{ cursor: "pointer" }} onClick={() => handleDownload(co.url, co.name)}><FaDownload /></td>
+                                        <td data-label="Datetime">{co.date_pinned.toLocaleString()}</td>
+                                        <td data-label="Download" style={{ cursor: "pointer" }} onClick={() => handleDownload(co.ipfs_pin_hash, co.name)}><FaDownload /></td>
                                     </tr>)}
                                 </tbody>
                             </table>
