@@ -1,0 +1,31 @@
+@import '../../sass/theme.scss';
+
+.devs {
+    display: flex;
+    height: 100vh;
+    flex-flow: column;
+    width: 100vw;
+    place-items: center;
+    justify-content: center;
+    transform: translateY(-2rem);
+
+    &-title {
+        @include font-face($family: 'bebas', $size: 5rem, $weight: bold);
+        color: $black;
+    }
+
+    &-dev {
+        @include font-face($family: 'ubuntu', $size: 2rem);
+        color: $black;
+        list-style-type: none;
+
+        &:not(:last-child) {
+            padding-bottom: .5rem;
+        }
+    }
+}
+
+.logo {
+    width: 40rem;
+    transform: translateY(-2rem);
+}

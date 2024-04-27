@@ -248,3 +248,16 @@ tbody tr:nth-child(even) {
         }
     }
 }
+
+.developers {
+    text-align: right;
+    padding-right: 2rem;
+    @include font-face($family: 'ubuntu', $size: 1rem);
+
+    strong {
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}
