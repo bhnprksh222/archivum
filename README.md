@@ -33,6 +33,6 @@ npm start
 
 Application runs on the localhost on port 5173, open the below link to see it in action:
 ```
-https:localhost:5173
+http:localhost:5173
 ```
 
